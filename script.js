@@ -204,8 +204,6 @@ ship4bGroup.position = new Point(660, 200);
 
 // TIR ENNEMI
 
-/*
-
 let moveEnnemyLaserPlayer = false;
 
 const ennemyLaserPlayer = new Raster({
@@ -214,8 +212,8 @@ const ennemyLaserPlayer = new Raster({
 ennemyLaserPlayer.visible = false;
 
 const ennemyLaserPlayerHitCircle = new Path.Circle(new Point(660, 200), 10);
-ennemyLaserPlayerHitCircle = "red";
-ennemyLaserPlayerHitCircle = 1;
+ennemyLaserPlayerHitCircle.strokeColor = "red";
+ennemyLaserPlayerHitCircle.strokeWidth = 1;
 
 const ennemyLaserPlayerGroup = new Group();
 
@@ -228,12 +226,10 @@ ennemyLaserPlayerGroup.position = new Point(
 );
 
 view.onFrame = function (event) {
-  if (moveLaserPlayer) {
-    ennemyLaserPlayerGroup.position.y -= 10;
+  if (Math.random() = 1) {
+    ennemyLaserPlayerGroup.position.y += 10;
   }
 };
-
-*/
 
 // HITBOX + GROUP DU JOUEUR + ZONE DE DEPLACEMENT + DEPLACEMENT + RESTRICTIONS BORDURE
 
