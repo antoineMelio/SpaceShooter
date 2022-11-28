@@ -202,22 +202,62 @@ ship4bGroup.addChild(ship4bHitCircle);
 // et maintenant, si je change la position du groupe, ça bougera à la fois l'image et le cercle de collision !
 ship4bGroup.position = new Point(660, 200);
 
-const shootEnnemy = new Raster({ source: "PNG/Lasers/laserRed03.png" });
-shootEnnemy.position = new Point(ship4bGroup.x, ship4bGroup.y);
+// TIR ENNEMI TIMER + RANDOMIZER
 
-const ennemyShootHitCircle = new Path.Circle(
-  new Point(ship4bGroup.x, ship4bGroup.y),
-  10
-);
-ennemyShootHitCircle.strokeColor = "red";
-ennemyShootHitCircle.strokeWidth = 1;
+const element = document.getElementById("test");
+let time, previousTimeStamp;
 
-const ennemyShootGroup = new Group();
+timerConfig = {
+  frequency: 1, // Seconds
+  stopAt: 10, // Seconds,
+};
 
-ennemyShootGroup.addChild(shootEnnemy);
-ennemyShootGroup.addChild(ennemyShootHitCircle);
+function timer(timestamp) {
+  if (time === undefined) time = timestamp;
+  if (previousTimeStamp === undefined) previousTimeStamp = timestamp;
+  const seconds = timerConfig.frequency * 1000;
+  const tick = timestamp - previousTimeStamp;
 
-ennemyShootGroup.position = new Point(y--);
+  function trigger() {
+    element.style.transform = "translateX(" + timerConfig.pos + "px)";
+  }
+
+  if (tick >= seconds) {
+    trigger();
+    previousTimeStamp = timestamp; // Updating The Timer each second
+    timerConfig.updatePos();
+  }
+  if (timestamp < timerConfig.stopAt * 1000) requestAnimationFrame(timer); // 10 Seconds
+}
+
+requestAnimationFrame(timer);
+
+getRndInteger(0, 2);
+function getRndInteger(min, max) {
+  return Math.floor(Math.random() * (max - min)) + min;
+}
+
+if ((Math.floor = 0)) {
+}
+
+if ((Math.floor = 1)) {
+  const shootEnnemy = new Raster({ source: "PNG/Lasers/laserRed03.png" });
+  shootEnnemy.position = new Point(ship4bGroup.x, ship4bGroup.y);
+
+  const ennemyShootHitCircle = new Path.Circle(
+    new Point(ship4bGroup.x, ship4bGroup.y),
+    10
+  );
+  ennemyShootHitCircle.strokeColor = "red";
+  ennemyShootHitCircle.strokeWidth = 1;
+
+  const ennemyShootGroup = new Group();
+
+  ennemyShootGroup.addChild(shootEnnemy);
+  ennemyShootGroup.addChild(ennemyShootHitCircle);
+
+  ennemyShootGroup.position = new Point(y--);
+}
 
 // HITBOX + GROUP DU JOUEUR + ZONE DE DEPLACEMENT + DEPLACEMENT + RESTRICTIONS BORDURE
 
@@ -296,43 +336,3 @@ if (playerGroup.position.y > 700) {
 if (playerGroup.position.y < 450) {
   playerGroup.position.y += 50;
 }
-
-// TEST MOUVEMENT LASER
-/*
-function createLaserElement() {
-  let xPosition = parseInt(
-    window.getComputedStyle(shooter).getPropertyValue("left")
-  );
-  let yPosition = parseInt(
-    window.getComputedStyle(shooter).getPropertyValue("top")
-  );
-  let newLaser = document.createElement("img");
-  newLaser.src = "images/laser.png";
-  newLaser.classList.add("laser");
-  newLaser.style.left = `${xPosition}px`;
-  newLaser.style.top = `${yPosition - 10}px`;
-  return newLaser;
-}
-
-function moveLaser(laser) {
-  let laserInterval = setInterval(() => {
-    let xPosition = parseInt(laser.style.left);
-    let monsters = document.querySelectorAll(".monster");
-    monsters.forEach((monster) => {
-      if (checkLaserCollision(laser, monster)) {
-        let explosion = new Audio("audio/explosion.m4a");
-        explosion.play();
-        monster.src = "images/explosion.png";
-        monster.classList.remove("monster");
-        monster.classList.add("dead-monster");
-        scoreCounter.innerText = parseInt(scoreCounter.innerText) + 100;
-      }
-    });
-    if (xPosition === 340) {
-      laser.remove();
-    } else {
-      laser.style.left = `${xPosition + 4}px`;
-    }
-  }, 10);
-}
-*/
