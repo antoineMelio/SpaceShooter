@@ -277,11 +277,20 @@ const playerZone = new Group();
 
 playerZone.addChild(rectangle);
 
+// laser
+
+let moveLaserPlayer = false;
+
 const laserPlayer = new Raster({
-  source: "SpaceShooterRedux/PNG/Lasers/laserBlue01.png",
+  source: "PNG/Lasers/laserBlue01.png",
 });
 laserPlayer.visible = false;
 
+view.onFrame = function (event) {
+  if (moveLaserPlayer) {
+    laserPlayer.position.y -= 10;
+  }
+};
 view.onKeyDown = function (event) {
   switch (event.key) {
     case "left":
@@ -309,10 +318,6 @@ view.onKeyDown = function (event) {
       break;
   }
 };
-
-// laser
-
-let moveLaserPlayer = false;
 
 // BORDURE DU JOUEUR
 
