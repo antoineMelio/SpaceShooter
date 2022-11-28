@@ -25,7 +25,7 @@ const ligne1 = [
 console.log(ligne1.length); // affiche le nombre d'element
 
 console.log(ligne1); // affiche ["Luke", "Leia", "Obi-wan", "Rey", "Yoda"]
-
+// LIGNE 1 D'ELEMENT
 const meteor = new Raster({
   source: "PNG/Meteors/meteorGrey_big1.png",
 });
@@ -98,7 +98,7 @@ const meteor4 = new Raster({
 meteor4.position = new Point(1320, 100);
 meteor4.scale(0.7);
 
-////////////
+//////////// LIGNE 2 D'ELEMENT
 
 const meteorb = new Raster({
   source: "PNG/Meteors/meteorGrey_big1.png",
@@ -166,6 +166,8 @@ const meteor4b = new Raster({
 meteor4b.position = new Point(1320, 200);
 meteor4b.scale(0.7);
 
+// VIE DES JOUEURS
+
 const live1 = new Raster({ source: "PNG/playerShip2_blue.png" });
 live1.position = new Point(30, 670);
 live1.scale(0.4);
@@ -177,6 +179,8 @@ live2.scale(0.4);
 const live3 = new Raster({ source: "PNG/playerShip2_blue.png" });
 live3.position = new Point(130, 670);
 live3.scale(0.4);
+
+// HITBOX + GROUP DE L'ENNEMI + LASER
 
 // l'image du joueur
 const ship4b = new Raster({ source: "PNG/Enemies/enemyBlack4.png" });
@@ -197,23 +201,38 @@ ship4bGroup.addChild(ship4bHitCircle);
 
 // et maintenant, si je change la position du groupe, ça bougera à la fois l'image et le cercle de collision !
 ship4bGroup.position = new Point(660, 200);
-// l'image du joueur
+
+const shootEnnemy = new Raster({ source: "PNG/Lasers/laserRed03.png" });
+shootEnnemy.position = new Point(ship4bGroup.x, ship4bGroup.y);
+
+const ennemyShootHitCircle = new Path.Circle(
+  new Point(ship4bGroup.x, ship4bGroup.y),
+  10
+);
+ennemyShootHitCircle.strokeColor = "red";
+ennemyShootHitCircle.strokeWidth = 1;
+
+const ennemyShootGroup = new Group();
+
+ennemyShootGroup.addChild(shootEnnemy);
+ennemyShootGroup.addChild(ennemyShootHitCircle);
+
+ennemyShootGroup.position = new Point(y--);
+
+// HITBOX + GROUP DU JOUEUR + ZONE DE DEPLACEMENT + DEPLACEMENT + RESTRICTIONS BORDURE
+
 const playerImg = new Raster({ source: "PNG/playerShip2_blue.png" });
 playerImg.position = new Point(722, 650);
 
-// la zone de collision du joueur
 const playerHitCircle = new Path.Circle(new Point(722, 650), 50);
 playerHitCircle.strokeColor = "blue";
 playerHitCircle.strokeWidth = 1;
 
-// je crée le groupe
 const playerGroup = new Group();
 
-// j'ajoute mes deux éléments dans le groupe
 playerGroup.addChild(playerImg);
 playerGroup.addChild(playerHitCircle);
 
-// et maintenant, si je change la position du groupe, ça bougera à la fois l'image et le cercle de collision !
 playerGroup.position = new Point(650, 650);
 
 const start = new Point(250, 700);
@@ -222,6 +241,10 @@ const rectangle = new Path.Rectangle(start, end);
 
 rectangle.strokeColor = "green";
 rectangle.strokeWidth = 3;
+
+const playerZone = new Group();
+
+playerZone.addChild(rectangle);
 
 view.onKeyDown = function (event) {
   switch (event.key) {
@@ -257,3 +280,59 @@ view.onKeyDown = function (event) {
       break;
   }
 };
+
+if (playerGroup.position.x > 1250) {
+  playerGroup.position.x -= 50;
+}
+
+if (playerGroup.position.x < 250) {
+  playerGroup.position.x += 50;
+}
+
+if (playerGroup.position.y > 700) {
+  playerGroup.position.y -= 50;
+}
+
+if (playerGroup.position.y < 450) {
+  playerGroup.position.y += 50;
+}
+
+// TEST MOUVEMENT LASER
+/*
+function createLaserElement() {
+  let xPosition = parseInt(
+    window.getComputedStyle(shooter).getPropertyValue("left")
+  );
+  let yPosition = parseInt(
+    window.getComputedStyle(shooter).getPropertyValue("top")
+  );
+  let newLaser = document.createElement("img");
+  newLaser.src = "images/laser.png";
+  newLaser.classList.add("laser");
+  newLaser.style.left = `${xPosition}px`;
+  newLaser.style.top = `${yPosition - 10}px`;
+  return newLaser;
+}
+
+function moveLaser(laser) {
+  let laserInterval = setInterval(() => {
+    let xPosition = parseInt(laser.style.left);
+    let monsters = document.querySelectorAll(".monster");
+    monsters.forEach((monster) => {
+      if (checkLaserCollision(laser, monster)) {
+        let explosion = new Audio("audio/explosion.m4a");
+        explosion.play();
+        monster.src = "images/explosion.png";
+        monster.classList.remove("monster");
+        monster.classList.add("dead-monster");
+        scoreCounter.innerText = parseInt(scoreCounter.innerText) + 100;
+      }
+    });
+    if (xPosition === 340) {
+      laser.remove();
+    } else {
+      laser.style.left = `${xPosition + 4}px`;
+    }
+  }, 10);
+}
+*/
