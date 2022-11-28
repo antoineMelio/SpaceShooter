@@ -202,53 +202,38 @@ ship4bGroup.addChild(ship4bHitCircle);
 // et maintenant, si je change la position du groupe, ça bougera à la fois l'image et le cercle de collision !
 ship4bGroup.position = new Point(660, 200);
 
-// TIR ENNEMI TIMER + RANDOMIZER
+// TIR ENNEMI
 
-const element = document.getElementById("test");
-let time, previousTimeStamp;
+/*
 
-timerConfig = {
-  frequency: 1, // Seconds
-  stopAt: 10, // Seconds,
-};
+let moveEnnemyLaserPlayer = false;
 
-function timer(timestamp) {
-  if (time === undefined) time = timestamp;
-  if (previousTimeStamp === undefined) previousTimeStamp = timestamp;
-  const seconds = timerConfig.frequency * 1000;
-  const tick = timestamp - previousTimeStamp;
+const ennemyLaserPlayer = new Raster({
+  source: "PNG/Lasers/laserBlue01.png",
+});
+ennemyLaserPlayer.visible = false;
 
-  function trigger() {
-    element.style.transform = "translateX(" + timerConfig.pos + "px)";
-  }
+const ennemyLaserPlayerHitCircle = new Path.Circle(new Point(660, 200), 10);
+ennemyLaserPlayerHitCircle = "red";
+ennemyLaserPlayerHitCircle = 1;
 
-  if (tick >= seconds) {
-    trigger();
-    previousTimeStamp = timestamp; // Updating The Timer each second
-    timerConfig.updatePos();
-  }
-  if (timestamp < timerConfig.stopAt * 1000) requestAnimationFrame(timer); // 10 Seconds
-}
+const ennemyLaserPlayerGroup = new Group();
 
-requestAnimationFrame(timer);
+ennemyLaserPlayerGroup.addChild(ennemyLaserPlayer);
+ennemyLaserPlayerGroup.addChild(ennemyLaserPlayerHitCircle);
 
-getRndInteger(0, 2);
-function getRndInteger(min, max) {
-  return Math.floor(Math.random() * (max - min)) + min;
-}
+ennemyLaserPlayerGroup.position = new Point(
+  ship4bGroup.position.x,
+  ship4bGroup.position.y
+);
 
-if ((Math.floor = 0)) {
-}
-
-if ((Math.floor = 1)) {
-}
-
-//deplacement laser
-view.onFrame = function () {
+view.onFrame = function (event) {
   if (moveLaserPlayer) {
-    laserPlayer.position.y -= 10;
+    ennemyLaserPlayerGroup.position.y -= 10;
   }
 };
+
+*/
 
 // HITBOX + GROUP DU JOUEUR + ZONE DE DEPLACEMENT + DEPLACEMENT + RESTRICTIONS BORDURE
 
@@ -281,29 +266,64 @@ playerZone.addChild(rectangle);
 
 let moveLaserPlayer = false;
 
+// l'image du joueur
+
 const laserPlayer = new Raster({
   source: "PNG/Lasers/laserBlue01.png",
 });
 laserPlayer.visible = false;
 
+// la zone de collision du joueur
+const laserPlayerHitCircle = new Path.Circle(
+  new Point(playerGroup.position.x, playerGroup.position.y),
+  10
+);
+laserPlayerHitCircle.strokeColor = "blue";
+laserPlayerHitCircle.strokeWidth = 1;
+
+// je crée le groupe
+const laserPlayerGroup = new Group();
+
+// j'ajoute mes deux éléments dans le groupe
+laserPlayerGroup.addChild(laserPlayer);
+laserPlayerGroup.addChild(laserPlayerHitCircle);
+
+// et maintenant, si je change la position du groupe, ça bougera à la fois l'image et le cercle de collision !
+laserPlayerGroup.position = new Point(
+  playerGroup.position.x,
+  playerGroup.position.y
+);
+
 view.onFrame = function (event) {
   if (moveLaserPlayer) {
-    laserPlayer.position.y -= 10;
+    laserPlayerGroup.position.y -= 10;
   }
 };
 view.onKeyDown = function (event) {
   switch (event.key) {
     case "left":
       playerGroup.position.x -= 50;
+      if (player.position.x < 250) {
+        player.position.x += 50;
+      }
       break;
     case "right":
       playerGroup.position.x += 50;
+      if (player.position.x > 1250) {
+        player.position.x -= 50;
+      }
       break;
     case "up":
       playerGroup.position.y -= 50;
+      if (player.position.y > 700) {
+        player.position.x -= 50;
+      }
       break;
     case "down":
       playerGroup.position.y += 50;
+      if (player.position.y < 450) {
+        player.position.x -= 50;
+      }
       break;
     case "space":
       if (laserPlayer.visible == false) {
@@ -318,21 +338,3 @@ view.onKeyDown = function (event) {
       break;
   }
 };
-
-// BORDURE DU JOUEUR
-
-if (playerGroup.position.x > end) {
-  playerGroup.position.x -= 50;
-}
-
-if (playerGroup.position.x < start) {
-  playerGroup.position.x += 50;
-}
-
-if (playerGroup.position.y > start) {
-  playerGroup.position.y -= 50;
-}
-
-if (playerGroup.position.y < end) {
-  playerGroup.position.y += 50;
-}
