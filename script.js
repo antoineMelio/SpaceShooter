@@ -241,23 +241,14 @@ if ((Math.floor = 0)) {
 }
 
 if ((Math.floor = 1)) {
-  const shootEnnemy = new Raster({ source: "PNG/Lasers/laserRed03.png" });
-  shootEnnemy.position = new Point(ship4bGroup.x, ship4bGroup.y);
-
-  const ennemyShootHitCircle = new Path.Circle(
-    new Point(ship4bGroup.x, ship4bGroup.y),
-    10
-  );
-  ennemyShootHitCircle.strokeColor = "red";
-  ennemyShootHitCircle.strokeWidth = 1;
-
-  const ennemyShootGroup = new Group();
-
-  ennemyShootGroup.addChild(shootEnnemy);
-  ennemyShootGroup.addChild(ennemyShootHitCircle);
-
-  ennemyShootGroup.position = new Point(y--);
 }
+
+//deplacement laser
+view.onFrame = function () {
+  if (moveLaserPlayer) {
+    laserPlayer.position.y -= 10;
+  }
+};
 
 // HITBOX + GROUP DU JOUEUR + ZONE DE DEPLACEMENT + DEPLACEMENT + RESTRICTIONS BORDURE
 
@@ -286,6 +277,11 @@ const playerZone = new Group();
 
 playerZone.addChild(rectangle);
 
+const laserPlayer = new Raster({
+  source: "SpaceShooterRedux/PNG/Lasers/laserBlue01.png",
+});
+laserPlayer.visible = false;
+
 view.onKeyDown = function (event) {
   switch (event.key) {
     case "left":
@@ -301,38 +297,37 @@ view.onKeyDown = function (event) {
       playerGroup.position.y += 50;
       break;
     case "space":
-      const shoot = new Raster({ source: "PNG/Lasers/laserBlue03.png" });
-      shoot.position = new Point(playerGroup.x, playerGroup.y);
-
-      const shootHitCircle = new Path.Circle(
-        new Point(playerGroup.x, playerGroup.y),
-        10
-      );
-      shootHitCircle.strokeColor = "blue";
-      shootHitCircle.strokeWidth = 1;
-
-      const shootGroup = new Group();
-
-      shootGroup.addChild(shoot);
-      shootGroup.addChild(shootHitCircle);
-
-      shootGroup.position = new Point(y++);
+      if (laserPlayer.visible == false) {
+        laserPlayer.visible = true;
+        laserPlayer.position = playerGroup.position;
+        moveLaserPlayer = true;
+      }
+      if (laserPlayer.position.y <= 0) {
+        laserPlayer.position = playerGroup.position;
+        moveLaserPlayer = true;
+      }
       break;
   }
 };
 
-if (playerGroup.position.x > 1250) {
+// laser
+
+let moveLaserPlayer = false;
+
+// BORDURE DU JOUEUR
+
+if (playerGroup.position.x > end) {
   playerGroup.position.x -= 50;
 }
 
-if (playerGroup.position.x < 250) {
+if (playerGroup.position.x < start) {
   playerGroup.position.x += 50;
 }
 
-if (playerGroup.position.y > 700) {
+if (playerGroup.position.y > start) {
   playerGroup.position.y -= 50;
 }
 
-if (playerGroup.position.y < 450) {
+if (playerGroup.position.y < end) {
   playerGroup.position.y += 50;
 }
