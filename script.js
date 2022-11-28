@@ -204,7 +204,10 @@ ship4bGroup.position = new Point(660, 200);
 
 // TIR ENNEMI
 
-let moveEnnemyLaserPlayer = false;
+
+
+function ennemyTir() {
+  let moveEnnemyLaserPlayer = false;
 
 const ennemyLaserPlayer = new Raster({
   source: "PNG/Lasers/laserBlue01.png",
@@ -220,6 +223,7 @@ const ennemyLaserPlayerGroup = new Group();
 ennemyLaserPlayerGroup.addChild(ennemyLaserPlayer);
 ennemyLaserPlayerGroup.addChild(ennemyLaserPlayerHitCircle);
 
+
 ennemyLaserPlayerGroup.position = new Point(
   ship4bGroup.position.x,
   ship4bGroup.position.y
@@ -230,7 +234,10 @@ view.onFrame = function (event) {
     ennemyLaserPlayerGroup.position.y += 10;
   }
 };
+  moveship4b = true;
+}
 
+setInterval(ennemyTir, 2000);
 // HITBOX + GROUP DU JOUEUR + ZONE DE DEPLACEMENT + DEPLACEMENT + RESTRICTIONS BORDURE
 
 const playerImg = new Raster({ source: "PNG/playerShip2_blue.png" });
